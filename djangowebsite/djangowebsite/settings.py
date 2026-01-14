@@ -11,11 +11,34 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-from dotenv import load_dotenv
 import os
 
-
-
+def load_dotenv(path=None):
+    """
+    Minimal .env loader to avoid external dependency.
+    Supports lines like KEY=VALUE and ignores comments/empty lines.
+    """
+    if path is None:
+        return
+    try:
+        p = Path(path)
+        if not p.exists():
+            # Support passing a Path object or string
+            p = Path(str(path))
+        if p.is_file():
+            for line in p.read_text().splitlines():
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
+                if '=' not in line:
+                    continue
+                key, val = line.split('=', 1)
+                key = key.strip()
+                val = val.strip().strip('\'"')
+                if key and key not in os.environ:
+                    os.environ[key] = val
+    except Exception:
+        pass
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
