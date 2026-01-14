@@ -31,6 +31,8 @@ jobs:
 
       - name: Django system checks
         run: |
+          export DJANGO_SETTINGS_MODULE=djangowebsite.settings
+        
           python manage.py check
 
       - name: Run tests
