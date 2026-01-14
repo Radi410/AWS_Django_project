@@ -30,11 +30,13 @@ jobs:
           echo "DJANGO_DEBUG=0" >> .env
 
       - name: Django system checks
+        working-directory: djangowebsite
         run: |
           export DJANGO_SETTINGS_MODULE=djangowebsite.settings
-        
           python manage.py check
 
       - name: Run tests
+        working-directory: djangowebsite
         run: |
           python manage.py test
+
