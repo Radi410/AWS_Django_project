@@ -1,4 +1,4 @@
-name: Build and Deploy to ECS
+name: Build and Deploy to AWS ECS
 
 on:
   push:
@@ -11,6 +11,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     env:
       AWS_REGION: eu-north-1
       AWS_ACCOUNT_ID: "022673484057"
@@ -27,17 +28,17 @@ jobs:
           role-to-assume: arn:aws:iam::022673484057:role/GitHubActionsECR_ECS
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Login to ECR
+      - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build and push image
+      - name: Build and push Docker image
         run: |
           ECR_REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
           docker build -t ${ECR_REPOSITORY}:latest .
           docker tag ${ECR_REPOSITORY}:latest ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
           docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
 
-      - name: Force ECS deployment
+      - name: Force ECS redeploy
         run: |
           aws ecs update-service \
             --cluster "${ECS_CLUSTER}" \
