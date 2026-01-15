@@ -10,6 +10,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY djangowebsite /app
 
-EXPOSE 8000
+EXPOSE 80
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "djangowebsite.wsgi:application", "--bind", "0.0.0.0:80", "--workers", "2"]
