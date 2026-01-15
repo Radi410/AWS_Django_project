@@ -69,10 +69,9 @@ jobs:
               cat Dockerfile
       - name: Build and push Docker image
         run: |
-          ECR_REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
-          docker build -t ${ECR_REPOSITORY}:latest  .
-          docker tag ${ECR_REPOSITORY}:latest ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
-          docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
+          IMAGE_TAG=${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
+          docker build -t $IMAGE_TAG .
+          docker push $IMAGE_TAG
 
       - name: Force ECS redeploy
         run: |
