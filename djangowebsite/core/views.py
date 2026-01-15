@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 #example view
 def home(request):
-    return HttpResponse("Welcome to the Home Page!")   
+    return HttpResponse("to the Home Page!")   
 
 def health_check(request):
     return jsonResponse({"status": "ok"}) 
