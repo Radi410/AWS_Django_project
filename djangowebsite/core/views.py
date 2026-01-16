@@ -6,5 +6,5 @@ from django.http import HttpResponse
 def home(request):
     return HttpResponse("Velkommen til hjemmesiden!")   
 
-
-    
+def health_check(request):
+    return jsonResponse({"status": "ok"})
